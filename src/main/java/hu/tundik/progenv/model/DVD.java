@@ -1,7 +1,6 @@
 package hu.tundik.progenv.model;
 
-public class DVD
-{
+public class DVD {
     private int id;
     private String title;
     private String genre;
@@ -20,7 +19,6 @@ public class DVD
         this.available = available;
     }
 
-    // Getterek és setterek
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
@@ -40,8 +38,7 @@ public class DVD
     public void setAvailable(boolean available) { this.available = available; }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return title + " (" + genre + ", " + movieLength + " min, " + dailyPrice + " €/day)";
     }
 }

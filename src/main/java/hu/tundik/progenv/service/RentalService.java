@@ -1,60 +1,55 @@
-package hu.tundik.progenv.service;
+package hu.tundik.progenv.persistence;
 
-import hu.tundik.progenv.model.DVD;
 import hu.tundik.progenv.model.Rental;
-import hu.tundik.progenv.persistence.DVDDao;
-import hu.tundik.progenv.persistence.RentalDao;
-import java.sql.Date;
-import java.sql.SQLException;
+
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
-public class RentalService
-{
+public class RentalDao {
 
-    private final DVDDao dvdDao = new DVDDao();
-    private final RentalDao rentalDao = new RentalDao();
-
-    /**
-     * Kölcsönzés indítása, ha a DVD elérhető.
-     */
-    public boolean rentDVD(int customerId, int dvdId) throws SQLException
-    {
-        DVD dvd = dvdDao.findById(dvdId);
-        if (dvd == null || !dvd.isAvailable())
-        {
-            return false;
+    public void save(Rental rental) throws SQLException {
+        String sql = "INSERT INTO rental (customer_id, dvd_id, rental_date, return_date) VALUES (?, ?, ?, ?)";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, rental.getCustomerId());
+            stmt.setInt(2, rental.getDvdId());
+            stmt.setDate(3, rental.getRentalDate());
+            stmt.setDate(4, rental.getReturnDate());
+            stmt.executeUpdate();
         }
-
-        Rental rental = new Rental(0, customerId, dvdId, new Date(System.currentTimeMillis()), null);
-        rentalDao.save(rental);
-
-        dvd.setAvailable(false);
-        dvdDao.update(dvd);
-        return true;
     }
 
-    /**
-     * DVD visszavétele, és újra elérhetővé tétele.
-     */
-    public boolean returnDVD(int rentalId) throws SQLException
-    {
-        List<Rental> rentals = rentalDao.findAll();
-        for (Rental rental : rentals)
-        {
-            if (rental.getId() == rentalId && rental.getReturnDate() == null)
-            {
-                rental.setReturnDate(new Date(System.currentTimeMillis()));
-                rentalDao.updateReturnDate(rental.getId(), rental.getReturnDate());
-
-                DVD dvd = dvdDao.findById(rental.getDvdId());
-                if (dvd != null)
-                {
-                    dvd.setAvailable(true);
-                    dvdDao.update(dvd);
-                }
-                return true;
+    public List<Rental> findAll() throws SQLException {
+        List<Rental> list = new ArrayList<>();
+        String sql = "SELECT * FROM rental";
+        try (Connection conn = DatabaseConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                list.add(map(rs));
             }
         }
-        return false;
+        return list;
+    }
+
+    public void updateReturnDate(int rentalId, Date returnDate) throws SQLException {
+        String sql = "UPDATE rental SET return_date = ? WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setDate(1, returnDate);
+            stmt.setInt(2, rentalId);
+            stmt.executeUpdate();
+        }
+    }
+
+    private Rental map(ResultSet rs) throws SQLException {
+        return new Rental(
+                rs.getInt("id"),
+                rs.getInt("customer_id"),
+                rs.getInt("dvd_id"),
+                rs.getDate("rental_date"),
+                rs.getDate("return_date")
+        );
     }
 }

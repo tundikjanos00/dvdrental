@@ -4,8 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class DatabaseConnection
-{
+public class DatabaseConnection {
 
     private static final String URL = "jdbc:mariadb://localhost:3306/dvdrental";
     private static final String USER = "dvdrental_user";
@@ -13,27 +12,20 @@ public class DatabaseConnection
 
     private static Connection connection;
 
-
     private DatabaseConnection() {}
 
-    public static Connection getConnection() throws SQLException
-    {
-        if (connection == null || connection.isClosed())
-        {
+    public static Connection getConnection() throws SQLException {
+        if (connection == null || connection.isClosed()) {
             connection = DriverManager.getConnection(URL, USER, PASSWORD);
         }
         return connection;
     }
-    public static void closeConnection()
-    {
-        if (connection != null)
-        {
-            try
-            {
+
+    public static void closeConnection() {
+        if (connection != null) {
+            try {
                 connection.close();
-            }
-            catch (SQLException ignored)
-            {
+            } catch (SQLException ignored) {
             }
         }
     }

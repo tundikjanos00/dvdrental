@@ -1,7 +1,6 @@
 package hu.tundik.progenv.model;
 
-public class Customer
-{
+public class Customer {
     private int id;
     private String name;
     private String email;
@@ -29,8 +28,7 @@ public class Customer
     public void setPhone(String phone) { this.phone = phone; }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return name + " - " + email;
     }
 }

@@ -1,4 +1,4 @@
-package hu.tundik.progenv.test;
+package main.java.hu.tundik.progenv.test;
 
 import hu.tundik.progenv.persistence.DatabaseConnection;
 import org.junit.Test;
@@ -13,7 +13,7 @@ public class DatabaseConnectionTest
 {
 
     @Test
-    void testConnectionIsValid()
+    public void testConnectionIsValid()
     {
         try
         {

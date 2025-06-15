@@ -2,8 +2,7 @@ package hu.tundik.progenv.model;
 
 import java.sql.Date;
 
-public class Rental
-{
+public class Rental {
     private int id;
     private int customerId;
     private int dvdId;
@@ -36,8 +35,7 @@ public class Rental
     public void setReturnDate(Date returnDate) { this.returnDate = returnDate; }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "Rental[id=" + id + ", customerId=" + customerId + ", dvdId=" + dvdId + "]";
     }
 }

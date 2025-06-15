@@ -1,19 +1,17 @@
 package hu.tundik.progenv.persistence;
 
 import hu.tundik.progenv.model.DVD;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DVDDao
-{
+public class DVDDao {
 
-    public void save(DVD dvd) throws SQLException
-    {
+    public void save(DVD dvd) throws SQLException {
         String sql = "INSERT INTO dvd (title, genre, movie_length, daily_price, available) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql))
-        {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, dvd.getTitle());
             stmt.setString(2, dvd.getGenre());
             stmt.setInt(3, dvd.getMovieLength());
@@ -23,44 +21,36 @@ public class DVDDao
         }
     }
 
-    public List<DVD> findAll() throws SQLException
-    {
+    public List<DVD> findAll() throws SQLException {
         List<DVD> list = new ArrayList<>();
         String sql = "SELECT * FROM dvd";
 
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql))
-        {
-            while (rs.next())
-            {
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
                 list.add(map(rs));
             }
         }
         return list;
     }
 
-    public DVD findById(int id) throws SQLException
-    {
+    public DVD findById(int id) throws SQLException {
         String sql = "SELECT * FROM dvd WHERE id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql))
-        {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
-            try (ResultSet rs = stmt.executeQuery())
-            {
+            try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) return map(rs);
             }
         }
         return null;
     }
 
-    public void update(DVD dvd) throws SQLException
-    {
+    public void update(DVD dvd) throws SQLException {
         String sql = "UPDATE dvd SET title=?, genre=?, movie_length=?, daily_price=?, available=? WHERE id=?";
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql))
-        {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, dvd.getTitle());
             stmt.setString(2, dvd.getGenre());
             stmt.setInt(3, dvd.getMovieLength());
@@ -71,12 +61,10 @@ public class DVDDao
         }
     }
 
-    public void delete(int id) throws SQLException
-    {
+    public void delete(int id) throws SQLException {
         String sql = "DELETE FROM dvd WHERE id=?";
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql))
-        {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
         }
@@ -93,17 +81,14 @@ public class DVDDao
             """;
 
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql))
-        {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, genre);
             stmt.setInt(2, minLength);
             stmt.setInt(3, maxLength);
             stmt.setDouble(4, maxPrice);
 
-            try (ResultSet rs = stmt.executeQuery())
-            {
-                while (rs.next())
-                {
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
                     result.add(map(rs));
                 }
             }
@@ -111,8 +96,7 @@ public class DVDDao
         return result;
     }
 
-    private DVD map(ResultSet rs) throws SQLException
-    {
+    private DVD map(ResultSet rs) throws SQLException {
         return new DVD(
                 rs.getInt("id"),
                 rs.getString("title"),
