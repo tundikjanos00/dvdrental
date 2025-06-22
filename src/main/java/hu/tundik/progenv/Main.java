@@ -1,8 +1,8 @@
-package hu.tundik.progenv;
+package main.java;
 
-import hu.tundik.progenv.model.DVD;
-import hu.tundik.progenv.persistence.DVDDao;
-import hu.tundik.progenv.service.RentalService;
+import main.java.model.DVD;
+import main.java.persistance.DVDDao;
+import main.java.service.RentalService;
 
 import java.sql.SQLException;
 import java.util.List;
