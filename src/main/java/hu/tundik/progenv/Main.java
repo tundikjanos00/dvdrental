@@ -1,12 +1,12 @@
-package main.java;
+package hu.tundik.progenv;
 
-import main.java.model.DVD;
-import main.java.persistance.DVDDao;
-import main.java.service.RentalService;
-
+import hu.tundik.progenv.model.DVD;
+import hu.tundik.progenv.persistance.DVDDao;
+import hu.tundik.progenv.service.RentalService;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
+
 
 public class Main {
 

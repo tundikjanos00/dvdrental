@@ -1,0 +1,28 @@
+CREATE DATABASE IF NOT EXISTS dvdrental CHARACTER SET utf8mb4 COLLATE utf8mb4_hungarian_ci;
+USE dvdrental;
+
+CREATE TABLE IF NOT EXISTS dvd (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    genre VARCHAR(100) NOT NULL,
+    movie_length INT NOT NULL,
+    daily_price DECIMAL(6,2) NOT NULL,
+    available BOOLEAN DEFAULT TRUE
+);
+
+CREATE TABLE IF NOT EXISTS customer (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(150) NOT NULL UNIQUE,
+    phone VARCHAR(30)
+);
+
+CREATE TABLE IF NOT EXISTS rental (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    customer_id INT NOT NULL,
+    dvd_id INT NOT NULL,
+    rental_date DATE NOT NULL,
+    return_date DATE,
+    FOREIGN KEY (customer_id) REFERENCES customer(id) ON DELETE CASCADE,
+    FOREIGN KEY (dvd_id) REFERENCES dvd(id) ON DELETE CASCADE
+);
